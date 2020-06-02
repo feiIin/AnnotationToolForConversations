@@ -1,0 +1,18 @@
+User:
+Hello!
+Storyteller:
+Hi!
+Storyteller:
+I will tell you a story.
+User:
+Go on.
+Storyteller:
+Once upon a time, there was a small ant.
+User:
+Cute!
+Storyteller:
+And than the ant disappeared.
+User:
+Oh. And?
+Storyteller:
+Nothing. The end!
