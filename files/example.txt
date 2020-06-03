@@ -1,17 +1,25 @@
+----
+Chat:1
+
 User:
 Hello!
 Storyteller:
 Hi!
 Storyteller:
-I will tell you a story.
+I have a story to tell you.
 User:
 Go on.
+-----
+
+
+Chat:2
+=====
 Storyteller:
 Once upon a time, there was a small ant.
 User:
 Cute!
 Storyteller:
-And than the ant disappeared.
+nobody knows where the ant came from, but one thing was certain: one day it vanished forever.
 User:
 Oh. And?
 Storyteller:

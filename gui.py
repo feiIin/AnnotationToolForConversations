@@ -19,7 +19,40 @@ def write_new_file(new_path):
     f.close()
 
 
-def start():
+def do_something():
+    if current_line < len(all_lines):
+        if "==" in all_lines[current_line][0] or "--" in all_lines[current_line][0]:
+            next_line_no_annotation()
+        elif "User" in all_lines[current_line][0]:
+            userlbl = Label(window, text="___User:___", font=("Arial Bold", 13))
+            new_file.append(all_lines[current_line])
+            userlbl.grid(row=0, column=2)
+            next_line_no_annotation()
+        elif "Storytel" in all_lines[current_line][0]:
+            userlbl = Label(window, text="Storyteller:", font=("Arial Bold", 13))
+            userlbl.grid(row=0, column=2)
+            new_file.append(all_lines[current_line])
+            next_line_no_annotation()
+        elif "Chat:" in all_lines[current_line][0]:
+            chatlbl = Label(window, text=all_lines[current_line][0], font=("Arial Bold", 13), fg="blue")
+            chatlbl.grid(row=1, column=0)
+            new_file.append(all_lines[current_line])
+            next_line_no_annotation()
+        else:
+            text = StringVar(value=all_lines[current_line][0])
+            entry = Entry(window, textvariable=text, font=("Arial Bold", 13), state='readonly')
+            scroll = Scrollbar(window, orient='horizontal', command=entry.xview)
+            entry.config(xscrollcommand=scroll.set)
+            entry.grid(row=1, column=1, columnspan=5, rowspan=2, sticky=W + E + N + S, padx=5, pady=5)
+            scroll.grid(row=2, column=1, columnspan=5, sticky=W + E + N + S)
+            new_file.append(all_lines[current_line])
+    else:
+        lbl0 = Label(window, text="Thanks! You can now close the window", font=("Arial Bold", 15), fg="red")
+        lbl0.grid(row=1, column=1, columnspan=5, sticky=W + E + N + S, padx=5, pady=5)
+        write_new_file("annotated_example.txt")
+
+
+def create_buttons():
     btn1 = Button(window, text="Next", bg="orange", command=next_line_no_annotation)  # fg="red")
     btn1.grid(column=0, row=3)
 
@@ -68,81 +101,40 @@ def start():
             row += 1
 
 
-    lbl0 = Label(window, text=all_lines[current_line][0], font=("Arial Bold", 13))
-    lbl0.grid(row=1, column=1, columnspan=4, sticky=W + E + N + S, padx=5, pady=5)
-    if current_line < len(all_lines):
-        if "==" in all_lines[current_line][0]:
-            next_line_no_annotation()
-        elif "User" in all_lines[current_line][0]:
-            userlbl = Label(window, text="___User:___", font=("Arial Bold", 13))
-            new_file.append(all_lines[current_line])
-            userlbl.grid(row=0, column=2)
-            next_line_no_annotation()
-        elif "Storytel" in all_lines[current_line][0]:
-            userlbl = Label(window, text="Storyteller:", font=("Arial Bold", 13))
-            userlbl.grid(row=0, column=2)
-            new_file.append(all_lines[current_line])
-            next_line_no_annotation()
+def start():
+    # creates and display all the buttons needed to annotate
+    create_buttons()
+    # based on the first line of the txt, decide what to do
+    do_something()
+    # destroy 'start' button
     btn10.destroy()
 
 
 def next_line_no_annotation():
     global current_line
-    current_line += 1
-    if current_line < len(all_lines):
-        if "==" in all_lines[current_line][0]:
-            next_line_no_annotation()
-        elif "User" in all_lines[current_line][0]:
-            userlbl = Label(window, text="___User:___", font=("Arial Bold", 13))
-            new_file.append(all_lines[current_line])
-            userlbl.grid(row=0, column=2)
-            next_line_no_annotation()
-        elif "Storytel" in all_lines[current_line][0]:
-            userlbl = Label(window, text="Storyteller:", font=("Arial Bold", 13))
-            userlbl.grid(row=0, column=2)
-            new_file.append(all_lines[current_line])
-            next_line_no_annotation()
-        else:
-            lbl0 = Label(window, text=all_lines[current_line][0], font=("Arial Bold", 13))
-            lbl0.grid(row=1, column=1, columnspan=4, sticky=W + E + N + S, padx=5, pady=5)
-            new_file.append(all_lines[current_line])
+    # if there aren't new lines, print message, else go to the next line and decide what to do
+    if current_line == len(all_lines):
+        print("You can now close the window")
     else:
-        lbl0 = Label(window, text="Thanks! You can now close the window", font=("Arial Bold", 15), fg="red")
-        lbl0.grid(row=1, column=1, columnspan=4, sticky=W + E + N + S, padx=5, pady=5)
-        write_new_file("annotated_example.txt")
+        current_line += 1
+        do_something()
 
 
 def next_line(annotation):
     global current_line
-    all_lines[current_line][0] = all_lines[current_line][0][:-1] + " (" + annotation + ")\n"
-    current_line += 1
-    if current_line < len(all_lines):
-        if "==" in all_lines[current_line][0]:
-            next_line_no_annotation()
-        elif "User" in all_lines[current_line][0]:
-            userlbl = Label(window, text="___User:___", font=("Arial Bold", 13))
-            new_file.append(all_lines[current_line])
-            userlbl.grid(row=0, column=2)
-            next_line_no_annotation()
-        elif "Storytel" in all_lines[current_line][0]:
-            userlbl = Label(window, text="Storyteller:", font=("Arial Bold", 13))
-            userlbl.grid(row=0, column=2)
-            new_file.append(all_lines[current_line])
-            next_line_no_annotation()
-        else:
-            lbl0 = Label(window, text=all_lines[current_line][0], font=("Arial Bold", 13))
-            lbl0.grid(row=1, column=1, columnspan=4, sticky=W + E + N + S, padx=5, pady=5)
-            new_file.append(all_lines[current_line])
+    # if there aren't new lines, print message, else annotate the current line
+    # and go to the next line to decide what to do
+    if current_line == len(all_lines):
+        print("You can now close the window")
     else:
-        lbl0 = Label(window, text="Thanks! You can now close the window", font=("Arial Bold", 15), fg="red")
-        lbl0.grid(row=1, column=1, columnspan=4, sticky=W + E + N + S, padx=5, pady=5)
-        write_new_file("annotated_example.txt")
+        all_lines[current_line][0] = all_lines[current_line][0][:-1] + " (" + annotation + ")\n"
+        current_line += 1
+        do_something()
 
 
 all_lines = read_file()
 current_line = 0
 new_file = []
-
 
 
 # Create tkinder gui as window
@@ -153,17 +145,12 @@ window.title("Annotation tool for conversations")
 window.geometry('1000x500')
 
 userlbl = Label(window, text="----", font=("Arial Bold", 13))
-userlbl.grid(row=0, column=2)
+userlbl.grid(row=1, column=0)
 
 
 # Window content
 lbl = Label(window, text="Your progress:", font=("Arial Bold", 13))
 lbl.grid(column=0, row=0)
-
-bar = Progressbar(window, length=100)
-bar.grid(column=1, row=0)
-bar['value'] = 50
-print(len(all_lines)/2)
 
 lbl1 = Label(window, text="", font=("Arial Bold", 15))
 lbl1.grid(column=2, row=3)
